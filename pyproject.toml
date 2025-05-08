@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "django-frontend-demo"
+version = "0.1.0"
+description = ""
+authors = [""]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "4.2.*"
+requests = "^2.32.3"
+django-environ = "^0.12.0"
+django-redis = "^5.4.0"
+mysqlclient = "^2.2.7"
+
+[tool.poetry.group.dev.dependencies]
+responses = "^0.25.7"
+ruff = "^0.11.8"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+indent-width = 4
+extend-exclude = ["*/migrations/*"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "E501",  # Line too long
+  "RUF002",  # Docstring 内で ambiguous unicode character（全角カッコ等）を扱うため
+  "RUF003",  # コメント内で ambiguous unicode character（全角カッコ等）を扱うため
+  "FIX",  # flake8-fix me
+  "TD",  # flake8-todos
+  "ERA",  # eradicate: コメントアウトされたコードをエラーとするが、誤検知が多いため（例えば、NOTE などのアノテーションコメント）
+  "COM812",  # Trailing comma missing
+  "ANN",  # 現状、型アノテーションを必須としていないため
+  "ISC001",  # ruff format との競合のため
+  "TRY002",  # Exception の使用を許可するため
+  "D",  # 現状、Docstring に関する制約は設けていないため
+]
+
+[tool.ruff.format]
+docstring-code-format = true

@@ -1,0 +1,57 @@
+services:
+  django-api-demo:
+    container_name: django_api_demo
+    ports:
+      - "2000:80"
+    build:
+      context: .
+      dockerfile: .docker/django_api_demo/Dockerfile
+    image: django-api-demo:latest
+    user: root
+    volumes:
+      - .:/var/www/django_api_demo
+      - /dev/null:/var/www/django_api_demo/poetry.toml
+    command: bash -c "python manage.py runserver 0.0.0.0:80"
+    pull_policy: never
+    links:
+      - db
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  db:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: .docker/db/Dockerfile
+    volumes:
+      - ./docker/db/data:/var/lib/mysql
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+      - "2001:3306"
+    environment:
+      TZ: "Asia/Tokyo"
+      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_DATABASE: django_demo
+    healthcheck:
+      test: "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD"
+      interval: 5s
+      timeout: 5s
+      retries: 3
+
+  redis:
+    image: redis:7
+    tty: true
+    ports:
+      - "2002:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping", "|", "grep", "PONG" ]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+
+networks:
+  django_demo:
+    external: true
