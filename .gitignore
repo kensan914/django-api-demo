@@ -162,4 +162,4 @@ cython_debug/
 #.idea/
 
 poetry.toml
-docker/db/data
+.docker/db/data
