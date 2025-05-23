@@ -18,6 +18,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "user",
+    "login",
 ]
 
 MIDDLEWARE = [
@@ -88,7 +91,7 @@ CACHES = {
     }
 }
 
-SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
 SESSION_COOKIE_SECURE = not DEBUG
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -119,3 +122,7 @@ STATICFILES_FINDERS = [
 ]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# TODO: 動確用
+# AUTH_USER_MODEL = "user.User"
+AUTHENTICATION_BACKENDS = ["common.backends.DemoBackend"]
